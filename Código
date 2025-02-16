@@ -1,0 +1,180 @@
+import discord
+import random
+import asyncio
+from discord.ext import commands
+from googlesearch import search
+
+TOKEN = "N/A"
+
+#Configurar los intents 
+intents = discord.Intents.default()
+intents.message_content = True
+bot = commands.Bot(command_prefix="!", intents=intents)
+
+@bot.event
+async def on_ready():
+    print(f'Conectado como {bot.user}')
+
+@bot.command()
+async def buscar(ctx, *,consulta):
+    """Busca en Google y devuelve los primeros 3 resultados"""
+    try:
+        resultados = search(consulta, num_results=3)
+        respuesta = "\n".join(resultados) if resultados else "No encontré resultados."
+    except Exception as e:
+        respuesta = f"Error al buscar: {e}"
+
+    await ctx.send(respuesta)
+
+#Lista de consejos para el cuidado del medio ambiente
+
+consejos = [
+    "Apaga las luces y desconecta los aparatos eléctricos cuando no los uses.",
+    "Reduce el consumo de plástico llevando tu propia bolsa reutilizable al hacer compras.",
+    "Evita el desperdicio de agua cerrando el grifo mientras te cepillas los dientes.",
+    "Recicla papel, cartón, vidrio y plástico correctamente.",
+    "Usa el transporte público, bicicleta o camina en lugar de usar el coche siempre que sea posible.",
+    "Planta árboles en tu comunidad para ayudar a mejorar el aire y reducir el calentamiento global.",
+    "Consume productos locales y de temporada para reducir la huella de carbono.",
+    "Usa botellas reutilizables en lugar de botellas de plástico desechables.",
+    "Evita comprar productos con demasiado embalaje y elige opciones sostenibles.",
+    "Reduce tu consumo de carne y opta por una dieta más basada en vegetales.",
+    "Aprovecha la luz natural durante el día en lugar de usar electricidad.",
+    "No arrojes basura en la calle, ríos o playas; usa los contenedores adecuados.",
+    "Repara y reutiliza objetos en lugar de desecharlos rápidamente.",
+    "Usa servilletas y pañuelos de tela en lugar de papel desechable.",
+    "No desperdicies comida; planifica tus compras y guarda bien los alimentos.",
+    "Usa productos de limpieza ecológicos que no contaminen el agua.",
+    "Participa en campañas de limpieza de playas, parques o ríos.",
+    "Evita el uso de aerosoles y productos con químicos dañinos para la capa de ozono.",
+    "Comparte el coche con amigos o compañeros de trabajo para reducir la contaminación.",
+    "Evita el consumo excesivo de papel digitalizando documentos siempre que sea posible.",
+    "Usa energías renovables siempre que puedas, como paneles solares o bombillas LED.",
+    "Recoge y recicla pilas y baterías en lugares adecuados, ya que son altamente contaminantes.",
+    "Educa a otros sobre la importancia de cuidar el medio ambiente y predica con el ejemplo.",
+    "No compres animales exóticos como mascotas; respeta la fauna silvestre.",
+    "Compra ropa de segunda mano o de marcas ecológicas para reducir el impacto ambiental de la industria textil.",
+    "Usa esponjas naturales o biodegradables en lugar de las sintéticas de plástico.",
+    "Si vas a la playa, usa protector solar ecológico para no contaminar el agua.",
+    "Reduce el uso de papel de regalo y opta por envolturas reciclables o reutilizables.",
+    "Evita comprar productos hechos con aceite de palma, ya que contribuyen a la deforestación.",
+    "Apoya marcas y empresas que promuevan prácticas ecológicas y sostenibles.",
+    "Utiliza electrodomésticos de bajo consumo energético para reducir el gasto eléctrico.",
+    "Si tienes jardín, usa compostaje para reducir residuos y mejorar la fertilidad del suelo.",
+    "Fomenta la biodiversidad plantando flores y plantas que ayuden a las abejas y mariposas.",
+    "Apoya iniciativas y leyes que protejan el medio ambiente en tu comunidad.",
+    "Reduce el uso de papel aluminio y papel film, optando por alternativas reutilizables como envoltorios de cera de abeja.",
+    "Evita los globos y confeti de plástico en celebraciones, ya que contaminan el medio ambiente.",
+    "Si usas maquillaje, elige productos ecológicos y libres de microplásticos.",
+    "Apoya las reservas naturales y los parques ecológicos con turismo responsable.",
+    "Utiliza bolsas de tela para la fruta y verdura en lugar de las de plástico del supermercado."
+]
+
+#Lista de datos curiosos del sobre el medio ambiente
+
+datos_curiosos = [
+    "El Amazonas produce alrededor del 20% del oxígeno del mundo y se le conoce como 'el pulmón del planeta'.",
+    "Una botella de plástico puede tardar hasta 450 años en descomponerse en el océano.",
+    "Los océanos absorben aproximadamente el 30% del dióxido de carbono emitido por los humanos, ayudando a reducir el cambio climático.",
+    "Las abejas son responsables de polinizar cerca del 70% de los cultivos que consumimos diariamente.",
+    "Cada año, se pierden alrededor de 10 millones de hectáreas de bosques en el mundo debido a la deforestación.",
+    "Un solo árbol puede absorber hasta 22 kg de dióxido de carbono al año y producir oxígeno suficiente para dos personas.",
+    "El reciclaje de una sola lata de aluminio puede ahorrar la energía suficiente para mantener encendida una bombilla de 100W durante cuatro horas.",
+    "Si todos usáramos bolsas reutilizables, se evitaría la producción de millones de toneladas de plástico al año.",
+    "Las plantas de interior pueden ayudar a reducir los niveles de contaminantes en el aire, como el formaldehído y el benceno.",
+    "El plástico en el océano supera en peso a los peces en algunas áreas marinas.",
+    "Más de 1 millón de aves marinas y 100,000 mamíferos marinos mueren cada año debido a la contaminación plástica en los océanos.",
+    "Un glaciar en la Antártida llamado 'Glaciar del Juicio Final' está derritiéndose rápidamente y podría aumentar el nivel del mar en más de 3 metros.",
+    "El Sahara, el desierto más grande del mundo, solía ser un área verde y fértil hace miles de años.",
+    "La temperatura de la Tierra ha aumentado aproximadamente 1.1 °C desde la Revolución Industrial debido a la actividad humana.",
+    "Se necesitan más de 3,000 litros de agua para producir una camiseta de algodón.",
+    "El coral obtiene su color de algas microscópicas llamadas 'zooxantelas', y cuando mueren por el calentamiento del agua, ocurre el blanqueamiento del coral.",
+    "Cada minuto se venden 1 millón de botellas de plástico en el mundo, y menos del 30% se reciclan.",
+    "Las vacas emiten metano, un gas de efecto invernadero 25 veces más potente que el CO₂, lo que contribuye al cambio climático.",
+    "Un ser humano produce aproximadamente 2 kg de basura al día, lo que equivale a más de 700 kg al año.",
+    "En un solo día, un árbol puede absorber hasta 100 litros de agua y liberarla nuevamente al aire como vapor.",
+    "Si toda la humanidad viviera con el mismo nivel de consumo que los países desarrollados, necesitaríamos al menos 3 planetas Tierra.",
+    "El bambú es la planta de más rápido crecimiento en el mundo; puede crecer hasta 90 cm en un solo día.",
+    "Los tiburones han estado en la Tierra durante más de 400 millones de años, mucho antes que los dinosaurios.",
+    "El aire dentro de las casas puede estar hasta 5 veces más contaminado que el aire exterior debido a productos químicos y falta de ventilación.",
+    "Alrededor del 40% de los alimentos producidos en el mundo se desperdician, lo que contribuye significativamente a las emisiones de gases de efecto invernadero.",
+    "La Gran Muralla Verde es un proyecto en África para plantar árboles y frenar la expansión del desierto del Sahara.",
+    "El Mar Muerto está desapareciendo lentamente debido a la sobreexplotación del agua en la región.",
+    "Los incendios forestales pueden liberar tanto dióxido de carbono como miles de automóviles en un año.",
+    "Las medusas han sobrevivido en la Tierra por más de 500 millones de años sin cerebro ni corazón.",
+    "Las tortugas marinas pueden confundir bolsas de plástico con medusas y comerlas, lo que puede ser fatal para ellas.",
+    "Alrededor del 70% del agua potable del mundo se utiliza para la agricultura.",
+    "Los ecosistemas de manglares pueden absorber hasta 10 veces más carbono que los bosques terrestres.",
+    "Los microplásticos han sido encontrados incluso en la nieve del Ártico y en la cima del Monte Everest.",
+    "Un solo litro de aceite usado puede contaminar hasta 1 millón de litros de agua potable.",
+    "Se han encontrado partículas de plástico en el 83% del agua potable en todo el mundo.",
+    "Cada año, el 90% de los grandes peces depredadores del océano son pescados, lo que altera los ecosistemas marinos.",
+    "El calentamiento global ha provocado que algunas especies cambien de hábitat para adaptarse a nuevas temperaturas.",
+    "La contaminación del aire reduce la esperanza de vida en más de 3 años en algunas ciudades altamente contaminadas."
+]
+
+@bot.command()
+async def dato(ctx):
+    """Envía un dato curioso sobre el medio ambiente"""
+    dato_aleatorio = random.choice(datos_curiosos)  # Selecciona un dato curioso al azar
+    await ctx.send(dato_aleatorio)
+
+# Diccionario para almacenar los puntos de los jugadores
+puntos_jugadores = {}
+
+frases = [
+    ("El _____ global es causado por el aumento de gases de efecto invernadero.", "calentamiento"),
+    ("Reciclar, reducir y _____ son las tres reglas básicas para cuidar el medio ambiente.", "reutilizar"),
+    ("El CO₂ es un gas de _____ que contribuye al cambio climático.", "efecto invernadero"),
+    ("El plástico puede tardar hasta _____ años en descomponerse en el océano.", "450"),
+    ("Los paneles _____ convierten la luz solar en energía.", "solares"),
+    ("Los residuos orgánicos pueden convertirse en _____ para mejorar el suelo.", "compost"),
+    ("El agua es un recurso _____ y debemos cuidarla.", "limitado"),
+    ("La energía _____ proviene de fuentes naturales como el viento y el sol.", "renovable"),
+    ("Las botellas de vidrio deben ir en el contenedor de color _____ en el reciclaje.", "verde"),
+    ("El _____ de bosques reduce la cantidad de oxígeno en la Tierra.", "desmonte"),
+    ("Los océanos absorben aproximadamente el _____% del CO₂ emitido por los humanos.", "30"),
+    ("Las abejas ayudan a la polinización, lo que es clave para la producción de _____.", "alimentos"),
+    ("El transporte público reduce la contaminación del _____ comparado con los autos particulares.", "aire"),
+    ("Los _____ reutilizables son una excelente alternativa a las bolsas plásticas.", "ecobolsas"),
+    ("Usar luces LED en casa ayuda a reducir el consumo de _____ eléctrica.", "energía"),
+]
+
+@bot.command()
+async def completa(ctx):
+    """Minijuego de completar la frase con puntos"""
+    frase, respuesta_correcta = random.choice(frases)  # Seleccionar frase aleatoria
+
+    await ctx.send(f"🧠 **Completa la frase:**\n{frase}\n*(Tienes 30 segundos para responder)*")
+
+    def check(msg):
+        return msg.channel == ctx.channel and msg.content.lower() == respuesta_correcta.lower()
+
+    try:
+        msg = await bot.wait_for("message", check=check, timeout=30)
+        jugador = msg.author
+
+        # Sumar puntos al jugador
+        if jugador.id in puntos_jugadores:
+            puntos_jugadores[jugador.id] += 1
+        else:
+            puntos_jugadores[jugador.id] = 1
+
+        await ctx.send(f"🎉 ¡Correcto, {jugador.mention}! La respuesta era **{respuesta_correcta}**. Tienes **{puntos_jugadores[jugador.id]} puntos**.")
+
+    except (asyncio.TimeoutError, asyncio.exceptions.TimeoutError):
+        await ctx.send(f"⏳ Tiempo agotado. La respuesta correcta era **{respuesta_correcta}**.")
+
+@bot.command()
+async def puntos(ctx):
+    """Muestra la tabla de puntuaciones"""
+    if not puntos_jugadores:
+        await ctx.send("📉 No hay puntos registrados aún.")
+        return
+
+    ranking = sorted(puntos_jugadores.items(), key=lambda x: x[1], reverse=True)
+    tabla_puntos = "\n".join([f"🏆 <@{jugador_id}> → {puntos} puntos" for jugador_id, puntos in ranking])
+
+    await ctx.send(f"📊 **Ranking de jugadores:**\n{tabla_puntos}")
+
+bot.run("N/A")

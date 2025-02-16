@@ -10,4 +10,9 @@
 - GoogleSearch
 - DiscordDevelopers
 - VS (Visual Studio Code)
+
+##Caracteristicas
+- Fácil interpretación
+- código intuitivo
+  
   
